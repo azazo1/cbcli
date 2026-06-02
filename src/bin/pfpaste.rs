@@ -8,10 +8,12 @@ use std::process::exit;
 struct AppArgs {
     #[arg(short = 'C', help = "粘贴的目录")]
     paste_path: Option<String>,
-    #[arg(short = 'm', long = "move")]
+    #[arg(short = 'm', long = "move", help = "移动文件而不是复制文件")]
     mv: bool,
-    #[arg(short = 'w', long = "overwrite")]
+    #[arg(short = 'w', long = "overwrite", help = "允许覆盖写入")]
     overwrite: bool,
+    #[arg(short = 'n', long = "dry-run", help = "查看写入文件情况")]
+    dry_run: bool,
 }
 
 fn move_file(from: &Path, to: &Path) -> std::io::Result<()> {
@@ -29,6 +31,7 @@ fn main() {
         paste_path,
         mv,
         overwrite,
+        dry_run,
     } = AppArgs::parse();
     let paste_path = PathBuf::from(paste_path.unwrap_or(".".into()));
     let ctx = ClipboardContext::new().unwrap();
@@ -53,10 +56,13 @@ fn main() {
 
     for file in &files {
         let to = paste_path.join(file.file_name().unwrap());
-        if mv {
-            move_file(file, &to).unwrap();
-        } else {
-            fs::copy(file, to).unwrap();
+        println!("{}", to.display());
+        if !dry_run {
+            if mv {
+                move_file(file, &to).unwrap();
+            } else {
+                fs::copy(file, to).unwrap();
+            }
         }
     }
 }
