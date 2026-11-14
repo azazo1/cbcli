@@ -1,4 +1,4 @@
-use anyhow::{bail, Context, Result};
+use anyhow::{Context, Result, bail};
 use clap::Parser;
 use clipboard_rs::common::RustImage;
 use clipboard_rs::{Clipboard, ClipboardContext, ContentFormat};
@@ -35,8 +35,7 @@ fn move_dir(from: &Path, to: &Path) -> Result<()> {
     }
     clonetree::clone_tree(from, to, &clonetree::Options::new())
         .with_context(|| format!("克隆目录 {} 失败", from.display()))?;
-    fs::remove_dir_all(from)
-        .with_context(|| format!("删除源目录 {} 失败", from.display()))?;
+    fs::remove_dir_all(from).with_context(|| format!("删除源目录 {} 失败", from.display()))?;
     Ok(())
 }
 
