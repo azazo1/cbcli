@@ -175,7 +175,7 @@ jobs:
 
       - name: 运行测试
         shell: bash
-        run: cargo test --locked
+        run: cargo test --release --locked
 
       - name: 构建并打包发布产物
         env:
