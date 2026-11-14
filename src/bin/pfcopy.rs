@@ -20,14 +20,17 @@ struct AppArgs {
 
 fn copy_files(files: &[impl AsRef<Path>]) {
     let ctx = ClipboardContext::new().unwrap();
+    // clipboard-rs 在 macOS 上自己把路径构造成 NSURL, 并过滤掉不存在的路径;
+    // 传 file:// URL 时空格等字符会被百分号编码 (%20), 每个路径都被判为不存在,
+    // 于是报 "no valid files". Windows 侧的 CF_HDROP 同样只接受裸路径.
     ctx.set_files(
         files
             .iter()
             .map(|f| {
-                url::Url::from_file_path(std::path::absolute(f.as_ref()).unwrap())
+                std::path::absolute(f.as_ref())
                     .unwrap()
-                    .as_str()
-                    .to_owned()
+                    .to_string_lossy()
+                    .into_owned()
             })
             .collect(),
     )
