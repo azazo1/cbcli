@@ -18,6 +18,10 @@ cargo run --bin pfcopy -- <file>...
 cargo run --bin pfpaste -- [options]
 ```
 
+## 发布产物
+
+macOS 与 Windows 的预编译产物发布在 GitHub Releases, 归档内同时含 `pfcopy` 与 `pfpaste`, 按平台与架构下载对应的 `cbcli-<版本>-<平台>-<架构>.tar.gz` 或 `.zip`.
+
 ## pfcopy
 
 把一个或多个文件放进系统剪贴板:

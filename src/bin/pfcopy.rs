@@ -8,7 +8,11 @@ use std::{
 use clap::Parser;
 use clipboard_rs::{Clipboard, ClipboardContext};
 
+#[path = "../version.rs"]
+mod version;
+
 #[derive(Parser, Debug)]
+#[command(name = "pfcopy", version = version::BUILD_VERSION)]
 struct AppArgs {
     #[arg(index = 1)]
     files: Vec<String>,

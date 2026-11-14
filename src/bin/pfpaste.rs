@@ -6,7 +6,11 @@ use std::fs;
 use std::path::{Path, PathBuf};
 use std::time::{SystemTime, UNIX_EPOCH};
 
+#[path = "../version.rs"]
+mod version;
+
 #[derive(Parser, Debug)]
+#[command(name = "pfpaste", version = version::BUILD_VERSION)]
 struct AppArgs {
     #[arg(short = 'C', help = "粘贴的目录")]
     paste_path: Option<String>,
